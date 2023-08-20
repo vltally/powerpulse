@@ -1,8 +1,8 @@
 {
   "name": "powerpulse",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "<p align=\"center\">   <a href=\"http://nestjs.com/\" target=\"blank\"><img src=\"https://nestjs.com/img/logo-small.svg\" width=\"200\" alt=\"Nest Logo\" /></a> </p>",
+  "author": "vltally",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -79,5 +79,13 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.heroku.com/calm-brushlands-74974.git"
   }
 }
