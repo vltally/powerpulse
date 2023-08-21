@@ -37,7 +37,7 @@ export class AuthService {
 
   async login(
     loginDto: LoginDto,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  ): Promise<{ accessToken: string; refreshToken: string; user: User }> {
     const { email, password } = loginDto;
     const user = await this.userModel.findOne({ email });
 
@@ -54,7 +54,7 @@ export class AuthService {
     const accessToken = this.getJwtAccessToken(user._id);
     const refreshToken = this.getJwtRefreshToken(user._id);
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, user };
   }
 
   public getJwtAccessToken(id: string) {
