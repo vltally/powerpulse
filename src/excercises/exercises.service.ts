@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { User } from 'src/auth/schemas/user.schema';
@@ -32,6 +36,25 @@ export class ExercisesService {
     }
 
     return training;
+  }
+
+  async deleteTraining(trainingId: string, user: User): Promise<Training> {
+    const isValidId = mongoose.isValidObjectId(trainingId);
+
+    if (!isValidId) {
+      throw new BadRequestException('Please enter correct id');
+    }
+
+    const deletedTraining = await this.trainingModel
+      .findByIdAndDelete(trainingId)
+      .where('userId')
+      .equals(user._id);
+
+    if (!deletedTraining) {
+      throw new NotFoundException('Training not found');
+    }
+
+    return deletedTraining;
   }
 
   async createExercise(

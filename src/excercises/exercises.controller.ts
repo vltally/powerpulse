@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -24,8 +25,18 @@ export class ExercisesController {
   // }
 
   @Get('users/training/:id')
+  @UseGuards(JwtAccessGuard)
   async getTraining(@Param('id') id: string): Promise<Training> {
     return this.exercisesService.findById(id);
+  }
+
+  @Delete('users/training/:id')
+  @UseGuards(JwtAccessGuard)
+  async deleteTraining(
+    @Param('id') trainingId: string,
+    @Req() req,
+  ): Promise<Training> {
+    return this.exercisesService.deleteTraining(trainingId, req.user);
   }
 
   @Post('createExercise')
