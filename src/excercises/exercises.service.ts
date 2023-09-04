@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { User } from 'src/auth/schemas/user.schema';
@@ -16,23 +16,23 @@ export class ExercisesService {
     private exerciseModel: mongoose.Model<Exercise>,
   ) {}
 
-  // async findById(id: string): Promise<Training> {
-  //   const isValidId = mongoose.isValidObjectId(id);
+  async findById(id: string): Promise<Training> {
+    const isValidId = mongoose.isValidObjectId(id);
 
-  //   if (!isValidId) {
-  //     throw new BadRequestException('Please enter correct id');
-  //   }
+    if (!isValidId) {
+      throw new BadRequestException('Please enter correct id');
+    }
 
-  //   const training = await this.trainingModel
-  //     .findById(id)
-  //     .populate('exercises');
+    const training = await this.trainingModel
+      .findById(id)
+      .populate('exercisesId');
 
-  //   if (!training) {
-  //     throw new NotFoundException('Training not found');
-  //   }
+    if (!training) {
+      throw new NotFoundException('Training not found');
+    }
 
-  //   return training;
-  // }
+    return training;
+  }
 
   async createExercise(
     exercise: CreateExerciseDto,
@@ -67,9 +67,11 @@ export class ExercisesService {
   }
 
   async getUserTrainings(user: User): Promise<Training[]> {
-    const trainings: Training[] = await this.trainingModel.find({
-      userId: user._id,
-    });
+    const trainings: Training[] = await this.trainingModel
+      .find({
+        userId: user._id,
+      })
+      .populate('exercisesId');
     return trainings;
   }
 }

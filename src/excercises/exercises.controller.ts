@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import JwtAccessGuard from 'src/auth/guards/JwtAccessGuard.guard';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { CreateTrainingDto } from './dto/create-training.dto';
@@ -15,10 +23,10 @@ export class ExercisesController {
   //   return this.bookService.findAll(query);
   // }
 
-  // @Get('users/training/:id')
-  // async getTraining(@Param('id') id: string): Promise<Training> {
-  //   return this.exercisesService.findById(id);
-  // }
+  @Get('users/training/:id')
+  async getTraining(@Param('id') id: string): Promise<Training> {
+    return this.exercisesService.findById(id);
+  }
 
   @Post('createExercise')
   @UseGuards(JwtAccessGuard)
