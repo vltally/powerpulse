@@ -35,9 +35,12 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async login(
-    loginDto: LoginDto,
-  ): Promise<{ accessToken: string; refreshToken: string; user: User }> {
+  async login(loginDto: LoginDto): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    user: User;
+    expiresIn: number;
+  }> {
     const { email, password } = loginDto;
     const user = await this.userModel.findOne({ email });
 
@@ -53,8 +56,9 @@ export class AuthService {
 
     const accessToken = this.getJwtAccessToken(user._id);
     const refreshToken = this.getJwtRefreshToken(user._id);
+    const expiresIn = +this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME');
 
-    return { accessToken, refreshToken, user };
+    return { accessToken, refreshToken, user, expiresIn };
   }
 
   public getJwtAccessToken(id: string) {

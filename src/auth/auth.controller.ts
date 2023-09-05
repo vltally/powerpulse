@@ -18,9 +18,12 @@ export class AuthController {
   }
 
   @Post('/login')
-  login(
-    @Body() loginDto: LoginDto,
-  ): Promise<{ accessToken: string; refreshToken: string; user: User }> {
+  login(@Body() loginDto: LoginDto): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    user: User;
+    expiresIn: number;
+  }> {
     return this.authService.login(loginDto);
   }
 
