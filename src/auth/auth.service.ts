@@ -18,7 +18,7 @@ export class AuthService {
 
   async signUp(
     signUpDto: SignUpDto,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  ): Promise<{ accessToken: string; refreshToken: string; expiresIn: number }> {
     const { name, email, password } = signUpDto;
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -31,8 +31,9 @@ export class AuthService {
 
     const accessToken = this.getJwtAccessToken(user._id);
     const refreshToken = this.getJwtRefreshToken(user._id);
-
-    return { accessToken, refreshToken };
+    const expiresIn = +this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME');
+    // return this.getNewTokens(user);
+    return { accessToken, refreshToken, expiresIn };
   }
 
   async login(loginDto: LoginDto): Promise<{
