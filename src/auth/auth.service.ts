@@ -79,12 +79,15 @@ export class AuthService {
     return token;
   }
 
-  async getNewTokens(user: User) {
+  async getNewTokens(
+    user: User,
+  ): Promise<{ access: string; refresh: string; expiresIn: number }> {
     const id = user._id;
 
     const access = this.getJwtAccessToken(id);
     const refresh = this.getJwtRefreshToken(id);
+    const expiresIn = +this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME');
 
-    return { access, refresh };
+    return { access, refresh, expiresIn };
   }
 }
