@@ -32,8 +32,8 @@ export class AuthService {
     const accessToken = this.getJwtAccessToken(user._id);
     const refreshToken = this.getJwtRefreshToken(user._id);
     const expiresIn = new Date().setTime(
-      new Date().getTime() +
-        this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME'),
+      Number(new Date().getTime()) +
+        Number(this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME')) * 1000,
     );
     // return this.getNewTokens(user);
     return { accessToken, refreshToken, expiresIn };
@@ -61,8 +61,8 @@ export class AuthService {
     const accessToken = this.getJwtAccessToken(user._id);
     const refreshToken = this.getJwtRefreshToken(user._id);
     const expiresIn = new Date().setTime(
-      new Date().getTime() +
-        this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME'),
+      Number(new Date().getTime()) +
+        Number(this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME')) * 1000,
     );
 
     return { accessToken, refreshToken, user, expiresIn };
@@ -94,8 +94,8 @@ export class AuthService {
     const access = this.getJwtAccessToken(id);
     const refresh = this.getJwtRefreshToken(id);
     const expiresIn = new Date().setTime(
-      new Date().getTime() +
-        this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME'),
+      Number(new Date().getTime()) +
+        Number(this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME')) * 1000,
     );
 
     return { access, refresh, expiresIn };
