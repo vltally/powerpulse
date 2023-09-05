@@ -8,6 +8,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import JwtAccessGuard from 'src/auth/guards/JwtAccessGuard.guard';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { CreateTrainingDto } from './dto/create-training.dto';
@@ -15,6 +16,7 @@ import { ExercisesService } from './exercises.service';
 import { Exercise } from './schemas/exercise.schema';
 import { Training } from './schemas/training.schema';
 
+@ApiSecurity('JWT-auth')
 @Controller('exercises')
 export class ExercisesController {
   constructor(private exercisesService: ExercisesService) {}
@@ -24,12 +26,14 @@ export class ExercisesController {
   //   return this.bookService.findAll(query);
   // }
 
+  @ApiTags('Training')
   @Get('users/training/:id')
   @UseGuards(JwtAccessGuard)
   async getTraining(@Param('id') id: string): Promise<Training> {
     return this.exercisesService.findById(id);
   }
 
+  @ApiTags('Training')
   @Delete('users/training/:id')
   @UseGuards(JwtAccessGuard)
   async deleteTraining(
@@ -48,6 +52,7 @@ export class ExercisesController {
     return this.exercisesService.createExercise(exercise, req.user);
   }
 
+  @ApiTags('Training')
   @Post('createTraining')
   @UseGuards(JwtAccessGuard)
   async createTraining(
@@ -63,6 +68,7 @@ export class ExercisesController {
     return this.exercisesService.getUserExercises(req.user);
   }
 
+  @ApiTags('Training')
   @Get('users/training')
   @UseGuards(JwtAccessGuard)
   async getUserTrainings(@Req() req): Promise<Training[]> {
@@ -72,7 +78,7 @@ export class ExercisesController {
   // @Post()
   // @UseGuards(JwtAccessGuard)
   // async createTraining(
-  //   @Body() exercise: CreateExerciseDto,
+  //   @Body() exercise: CreateExerciseDsto,
   //   @Req() req,
   // ): Promise<Exercise> {
   //   return this.exercisesService.createTraining(exercise);
