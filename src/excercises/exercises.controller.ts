@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -50,6 +51,15 @@ export class ExercisesController {
     @Req() req,
   ): Promise<Exercise> {
     return this.exercisesService.createExercise(exercise, req.user);
+  }
+
+  @Patch('increaseExercise/:id')
+  @UseGuards(JwtAccessGuard)
+  async increaseExercise(
+    @Param('id') exerciseId: string,
+    @Req() req,
+  ): Promise<Exercise> {
+    return this.exercisesService.increaseExercise(exerciseId, req.user);
   }
 
   @ApiTags('Training')
