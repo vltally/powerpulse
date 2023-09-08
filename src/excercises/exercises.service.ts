@@ -110,7 +110,6 @@ export class ExercisesService {
       .where('userId')
       .equals(user._id);
 
-    console.log(exercise);
     if (!exercise) {
       throw new NotFoundException('Exercise not found');
     }
@@ -122,7 +121,35 @@ export class ExercisesService {
 
     await exercise.save();
 
-    console.log(exercise);
+    return exercise;
+  }
+
+  async decreaseExercise(exerciseId: string, user: User): Promise<Exercise> {
+    const isValidId = mongoose.isValidObjectId(exerciseId);
+
+    if (!isValidId) {
+      throw new BadRequestException('Please enter correct id');
+    }
+
+    const exercise = await this.exerciseModel
+      .findById(exerciseId)
+      .where('userId')
+      .equals(user._id);
+
+    if (!exercise) {
+      throw new NotFoundException('Exercise not found');
+    }
+
+    if (exercise.count <= exercise.minCount) {
+      exercise.count = exercise.maxCount;
+
+      if (exercise.weight - exercise.weightUp <= 0) {
+        exercise.weight = 1;
+      } else exercise.weight -= exercise.weightUp;
+    } else exercise.count -= exercise.countUp;
+
+    await exercise.save();
+
     return exercise;
   }
 }

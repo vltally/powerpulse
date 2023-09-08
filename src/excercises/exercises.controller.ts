@@ -62,6 +62,15 @@ export class ExercisesController {
     return this.exercisesService.increaseExercise(exerciseId, req.user);
   }
 
+  @Patch('decreaseExercise/:id')
+  @UseGuards(JwtAccessGuard)
+  async decreaseExercise(
+    @Param('id') exerciseId: string,
+    @Req() req,
+  ): Promise<Exercise> {
+    return this.exercisesService.decreaseExercise(exerciseId, req.user);
+  }
+
   @ApiTags('Training')
   @Post('createTraining')
   @UseGuards(JwtAccessGuard)
