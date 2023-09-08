@@ -17,7 +17,7 @@ import { ExercisesService } from './exercises.service';
 import { Exercise } from './schemas/exercise.schema';
 import { Training } from './schemas/training.schema';
 
-@ApiSecurity('JWT-auth')
+@ApiSecurity('Access-JWT-auth')
 @Controller('exercises')
 export class ExercisesController {
   constructor(private exercisesService: ExercisesService) {}
@@ -44,6 +44,7 @@ export class ExercisesController {
     return this.exercisesService.deleteTraining(trainingId, req.user);
   }
 
+  @ApiTags('Exercise')
   @Post('createExercise')
   @UseGuards(JwtAccessGuard)
   async createExercise(
@@ -53,6 +54,7 @@ export class ExercisesController {
     return this.exercisesService.createExercise(exercise, req.user);
   }
 
+  @ApiTags('Exercise')
   @Patch('increaseExercise/:id')
   @UseGuards(JwtAccessGuard)
   async increaseExercise(
@@ -62,6 +64,7 @@ export class ExercisesController {
     return this.exercisesService.increaseExercise(exerciseId, req.user);
   }
 
+  @ApiTags('Exercise')
   @Patch('decreaseExercise/:id')
   @UseGuards(JwtAccessGuard)
   async decreaseExercise(
@@ -81,6 +84,7 @@ export class ExercisesController {
     return this.exercisesService.createTraining(training, req.user);
   }
 
+  @ApiTags('Exercise')
   @Get('users/')
   @UseGuards(JwtAccessGuard)
   async getUserExercises(@Req() req): Promise<Exercise[]> {

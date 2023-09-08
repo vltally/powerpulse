@@ -10,6 +10,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Query as ExpressQuery } from 'express-serve-static-core';
 import JwtAccessGuard from 'src/auth/guards/JwtAccessGuard.guard';
 import { BookService } from './book.service';
@@ -17,6 +18,7 @@ import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { Book } from './schemas/book.schema';
 
+@ApiTags('Books')
 @Controller('books')
 export class BookController {
   constructor(private bookService: BookService) {}
