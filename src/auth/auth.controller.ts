@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -29,6 +29,7 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
+  @ApiSecurity('Refresh-JWT-auth')
   @UseGuards(JwtRefreshGuard)
   @Post('login/access-token')
   async getNewTokens(@Body() dto: RefreshTokenDto, @Req() req) {
