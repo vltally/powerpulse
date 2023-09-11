@@ -98,6 +98,15 @@ export class ExercisesController {
     return this.exercisesService.getUserTrainings(req.user);
   }
 
+  @ApiTags('Exercise')
+  @Delete('deleteExercise/:id')
+  @UseGuards(JwtAccessGuard)
+  async deleteExercise(
+    @Req() req,
+    @Param('id') exerciseId: string,
+  ): Promise<Exercise> {
+    return this.exercisesService.deleteExercise(exerciseId, req.user);
+  }
   // @Post()
   // @UseGuards(JwtAccessGuard)
   // async createTraining(

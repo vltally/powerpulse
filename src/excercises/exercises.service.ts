@@ -152,4 +152,37 @@ export class ExercisesService {
 
     return exercise;
   }
+
+  async deleteExercise(exerciseId: string, user: User): Promise<Exercise> {
+    const exercise = await this.exerciseModel.findById(exerciseId);
+
+    if (!exercise) {
+      throw new NotFoundException('Exercise not found');
+    }
+    console.log(exercise);
+    console.log(exercise.userId);
+    if (exercise.userId.toString() !== user._id.toString()) {
+      throw new BadRequestException('Not user`s exercise');
+    }
+
+    const trainings = await this.trainingModel.find({
+      exercisesId: { $in: [exerciseId] },
+      userId: user._id,
+    });
+
+    if (trainings || trainings.length !== 0) {
+      for (const training of trainings) {
+        const exerciseIndex = training.exercisesId.indexOf(exerciseId);
+
+        if (exerciseIndex !== -1) {
+          training.exercisesId.splice(exerciseIndex, 1);
+          await training.save();
+        }
+      }
+    }
+
+    await this.exerciseModel.findByIdAndDelete(exerciseId);
+
+    return exercise;
+  }
 }
