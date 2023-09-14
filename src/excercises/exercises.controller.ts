@@ -13,6 +13,7 @@ import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import JwtAccessGuard from 'src/auth/guards/JwtAccessGuard.guard';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { CreateTrainingDto } from './dto/create-training.dto';
+import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { ExercisesService } from './exercises.service';
 import { Exercise } from './schemas/exercise.schema';
 import { Training } from './schemas/training.schema';
@@ -107,6 +108,17 @@ export class ExercisesController {
   ): Promise<Exercise> {
     return this.exercisesService.deleteExercise(exerciseId, req.user);
   }
+
+  @ApiTags('Exercise')
+  @Patch('updateExercise')
+  @UseGuards(JwtAccessGuard)
+  async updateExercise(
+    @Body() exercise: UpdateExerciseDto,
+    @Req() req,
+  ): Promise<Exercise> {
+    return this.exercisesService.updateExercise(exercise, req.user);
+  }
+
   // @Post()
   // @UseGuards(JwtAccessGuard)
   // async createTraining(

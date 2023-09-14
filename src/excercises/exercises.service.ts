@@ -8,6 +8,7 @@ import mongoose from 'mongoose';
 import { User } from 'src/auth/schemas/user.schema';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { CreateTrainingDto } from './dto/create-training.dto';
+import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { Exercise } from './schemas/exercise.schema';
 import { Training } from './schemas/training.schema';
 
@@ -159,8 +160,7 @@ export class ExercisesService {
     if (!exercise) {
       throw new NotFoundException('Exercise not found');
     }
-    console.log(exercise);
-    console.log(exercise.userId);
+
     if (exercise.userId.toString() !== user._id.toString()) {
       throw new BadRequestException('Not user`s exercise');
     }
@@ -182,6 +182,33 @@ export class ExercisesService {
     }
 
     await this.exerciseModel.findByIdAndDelete(exerciseId);
+
+    return exercise;
+  }
+
+  async updateExercise(
+    updateExerciseDto: UpdateExerciseDto,
+    user: User,
+  ): Promise<Exercise> {
+    const exercise = await this.exerciseModel.findById(updateExerciseDto._id);
+    console.log(exercise);
+    if (!exercise) {
+      throw new NotFoundException('Exercise not found');
+    }
+
+    if (exercise.userId.toString() !== user._id.toString()) {
+      throw new BadRequestException('Not user`s exercise');
+    }
+
+    exercise.count = updateExerciseDto.count;
+    exercise.minCount = updateExerciseDto.minCount;
+    exercise.maxCount = updateExerciseDto.maxCount;
+    exercise.countUp = updateExerciseDto.countUp;
+    exercise.weight = updateExerciseDto.weight;
+    exercise.weightUp = updateExerciseDto.weightUp;
+    exercise.name = updateExerciseDto.name;
+
+    exercise.save();
 
     return exercise;
   }
