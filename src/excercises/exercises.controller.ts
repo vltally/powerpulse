@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -109,14 +110,13 @@ export class ExercisesController {
     return this.exercisesService.deleteExercise(exerciseId, req.user);
   }
 
+  @HttpCode(200)
   @ApiTags('Exercise')
   @Patch('updateExercise')
   @UseGuards(JwtAccessGuard)
-  async updateExercise(
-    @Body() exercise: UpdateExerciseDto,
-    @Req() req,
-  ): Promise<Exercise> {
-    return this.exercisesService.updateExercise(exercise, req.user);
+  async updateExercise(@Body() exercise: UpdateExerciseDto, @Req() req) {
+    await this.exercisesService.updateExercise(exercise, req.user);
+    return { message: 'OK', HttpCode: 200 };
   }
 
   // @Post()

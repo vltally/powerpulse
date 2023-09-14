@@ -186,10 +186,7 @@ export class ExercisesService {
     return exercise;
   }
 
-  async updateExercise(
-    updateExerciseDto: UpdateExerciseDto,
-    user: User,
-  ): Promise<Exercise> {
+  async updateExercise(updateExerciseDto: UpdateExerciseDto, user: User) {
     const exercise = await this.exerciseModel.findById(updateExerciseDto._id);
     console.log(exercise);
     if (!exercise) {
@@ -208,8 +205,6 @@ export class ExercisesService {
     exercise.weightUp = updateExerciseDto.weightUp;
     exercise.name = updateExerciseDto.name;
 
-    exercise.save();
-
-    return exercise;
+    await exercise.save();
   }
 }
