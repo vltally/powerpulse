@@ -9,6 +9,7 @@ import { User } from 'src/auth/schemas/user.schema';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { CreateTrainingDto } from './dto/create-training.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
+import { UpdateTrainingDto } from './dto/update-training.dto';
 import { Exercise } from './schemas/exercise.schema';
 import { Training } from './schemas/training.schema';
 
@@ -188,7 +189,6 @@ export class ExercisesService {
 
   async updateExercise(updateExerciseDto: UpdateExerciseDto, user: User) {
     const exercise = await this.exerciseModel.findById(updateExerciseDto._id);
-    console.log(exercise);
     if (!exercise) {
       throw new NotFoundException('Exercise not found');
     }
@@ -206,5 +206,38 @@ export class ExercisesService {
     exercise.name = updateExerciseDto.name;
 
     await exercise.save();
+  }
+
+  async updateTraining(
+    updateTrainingDto: UpdateTrainingDto,
+    user: User,
+  ): Promise<void> {
+    const training = await this.trainingModel.findById(updateTrainingDto._id);
+    if (!training) {
+      throw new NotFoundException('Workout not found');
+    }
+    if (training.userId.toString() !== user._id.toString()) {
+      throw new BadRequestException('Not user`s workout');
+    }
+
+    if (updateTrainingDto.exercisesId.length !== 0) {
+      const validExercises = await this.exerciseModel.find({
+        _id: { $in: updateTrainingDto.exercisesId },
+      });
+
+      if (validExercises.length < updateTrainingDto.exercisesId.length) {
+        throw new BadRequestException(
+          'Some of the id`s are incorrect, or duplicated',
+        );
+      }
+    }
+
+    try {
+      training.name = updateTrainingDto.name;
+      training.exercisesId = updateTrainingDto.exercisesId;
+      await training.save();
+    } catch {
+      throw new BadRequestException('Exercise id validation failed');
+    }
   }
 }

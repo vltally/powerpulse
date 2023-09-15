@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
   Param,
   Patch,
   Post,
@@ -15,6 +14,7 @@ import JwtAccessGuard from 'src/auth/guards/JwtAccessGuard.guard';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { CreateTrainingDto } from './dto/create-training.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
+import { UpdateTrainingDto } from './dto/update-training.dto';
 import { ExercisesService } from './exercises.service';
 import { Exercise } from './schemas/exercise.schema';
 import { Training } from './schemas/training.schema';
@@ -110,15 +110,27 @@ export class ExercisesController {
     return this.exercisesService.deleteExercise(exerciseId, req.user);
   }
 
-  @HttpCode(200)
   @ApiTags('Exercise')
   @Patch('updateExercise')
   @UseGuards(JwtAccessGuard)
-  async updateExercise(@Body() exercise: UpdateExerciseDto, @Req() req) {
+  async updateExercise(
+    @Body() exercise: UpdateExerciseDto,
+    @Req() req,
+  ): Promise<{ message; HttpCode }> {
     await this.exercisesService.updateExercise(exercise, req.user);
     return { message: 'OK', HttpCode: 200 };
   }
 
+  @ApiTags('Training')
+  @Patch('updateTraining')
+  @UseGuards(JwtAccessGuard)
+  async updateTraining(
+    @Body() training: UpdateTrainingDto,
+    @Req() req,
+  ): Promise<{ message; HttpCode }> {
+    await this.exercisesService.updateTraining(training, req.user);
+    return { message: 'OK', HttpCode: 200 };
+  }
   // @Post()
   // @UseGuards(JwtAccessGuard)
   // async createTraining(
