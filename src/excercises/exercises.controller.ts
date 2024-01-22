@@ -14,6 +14,7 @@ import JwtAccessGuard from 'src/auth/guards/JwtAccessGuard.guard';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { CreateTrainingDto } from './dto/create-training.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
+import { UpdateExercisesDto } from './dto/update-exercises.dto';
 import { UpdateTrainingDto } from './dto/update-training.dto';
 import { ExercisesService } from './exercises.service';
 import { Exercise } from './schemas/exercise.schema';
@@ -119,6 +120,19 @@ export class ExercisesController {
   ): Promise<{ message; HttpCode }> {
     await this.exercisesService.updateExercise(exercise, req.user);
     return { message: 'OK', HttpCode: 200 };
+  }
+
+  @ApiTags('Exercise')
+  @Patch('updateExercises')
+  @UseGuards(JwtAccessGuard)
+  async updateExercises(
+    @Body() updateExercisesDto: UpdateExercisesDto,
+    @Req() req,
+  ): Promise<Exercise[]> {
+    return await this.exercisesService.updateExercises(
+      updateExercisesDto.exercisesId,
+      req.user,
+    );
   }
 
   @ApiTags('Training')

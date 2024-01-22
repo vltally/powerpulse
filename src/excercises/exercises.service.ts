@@ -240,4 +240,62 @@ export class ExercisesService {
       throw new BadRequestException('Exercise id validation failed');
     }
   }
+
+  async updateExercises(
+    exercisesId: string[],
+    user: User,
+  ): Promise<Exercise[]> {
+    let exercises: Exercise[];
+    if (exercisesId.length !== 0) {
+      exercises = await this.exerciseModel.find({
+        _id: { $in: exercisesId },
+        userId: user._id,
+      });
+
+      if (exercises.length < exercisesId.length) {
+        throw new BadRequestException(
+          'Some of the id`s are incorrect, or duplicated',
+        );
+      }
+    }
+    try {
+      for (let i = 0; i < exercises.length; i++) {
+        if (exercises[i].count >= exercises[i].maxCount) {
+          exercises[i].count = exercises[i].minCount;
+          exercises[i].weight += exercises[i].weightUp;
+        } else exercises[i].count += exercises[i].countUp;
+
+        await exercises[i].save();
+      }
+      return exercises;
+    } catch {
+      throw new BadRequestException('Exercise id validation failed');
+    }
+  }
+
+  // async increaseExercise(exerciseId: string, user: User): Promise<Exercise> {
+  //   const isValidId = mongoose.isValidObjectId(exerciseId);
+
+  //   if (!isValidId) {
+  //     throw new BadRequestException('Please enter correct id');
+  //   }
+
+  //   const exercise = await this.exerciseModel
+  //     .findById(exerciseId)
+  //     .where('userId')
+  //     .equals(user._id);
+
+  //   if (!exercise) {
+  //     throw new NotFoundException('Exercise not found');
+  //   }
+
+  //   if (exercise.count >= exercise.maxCount) {
+  //     exercise.count = exercise.minCount;
+  //     exercise.weight += exercise.weightUp;
+  //   } else exercise.count += exercise.countUp;
+
+  //   await exercise.save();
+
+  //   return exercise;
+  // }
 }
