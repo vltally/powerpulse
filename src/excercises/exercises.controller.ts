@@ -130,7 +130,7 @@ export class ExercisesController {
     @Req() req,
   ): Promise<Exercise[]> {
     return await this.exercisesService.updateExercises(
-      updateExercisesDto.exercisesId,
+      updateExercisesDto.trainingId,
       req.user,
     );
   }

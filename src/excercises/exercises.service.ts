@@ -241,18 +241,23 @@ export class ExercisesService {
     }
   }
 
-  async updateExercises(
-    exercisesId: string[],
-    user: User,
-  ): Promise<Exercise[]> {
+  async updateExercises(trainingId: string, user: User): Promise<Exercise[]> {
+    const training = await this.trainingModel.findById(trainingId);
+    if (!training) {
+      throw new NotFoundException('Workout not found');
+    }
+    if (training.userId.toString() !== user._id.toString()) {
+      throw new BadRequestException('Not user`s workout');
+    }
+
     let exercises: Exercise[];
-    if (exercisesId.length !== 0) {
+    if (training.exercisesId.length !== 0) {
       exercises = await this.exerciseModel.find({
-        _id: { $in: exercisesId },
+        _id: { $in: training.exercisesId },
         userId: user._id,
       });
 
-      if (exercises.length < exercisesId.length) {
+      if (exercises.length < training.exercisesId.length) {
         throw new BadRequestException(
           'Some of the id`s are incorrect, or duplicated',
         );
