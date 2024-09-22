@@ -65,7 +65,8 @@ export class AuthService {
         Number(this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME')) * 1000,
     );
 
-    user.password = '';
+    user.trainings = undefined;
+    user.password = undefined;
 
     return { accessToken, refreshToken, user, expiresIn };
   }
