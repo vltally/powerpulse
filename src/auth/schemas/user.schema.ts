@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { Training } from 'src/excercises/schemas/training.schema';
+import { Training } from 'src/exercises/schemas/training.schema';
 
 @Schema({
   timestamps: true,

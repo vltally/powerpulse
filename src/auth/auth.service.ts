@@ -65,6 +65,8 @@ export class AuthService {
         Number(this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME')) * 1000,
     );
 
+    user.password = '';
+
     return { accessToken, refreshToken, user, expiresIn };
   }
 
@@ -86,7 +88,6 @@ export class AuthService {
     return token;
   }
 
-  
   async getNewTokens(
     user: User,
   ): Promise<{ access: string; refresh: string; expiresIn: number }> {

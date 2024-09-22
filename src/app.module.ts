@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { BookModule } from './book/book.module';
-import { ExercisesModule } from './excercises/exercises.module';
+import { ExercisesModule } from './exercises/exercises.module';
 
 @Module({
   imports: [

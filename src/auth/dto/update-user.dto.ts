@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsEmail, IsString, IsUrl, MinLength } from 'class-validator';
-import { Training } from 'src/excercises/schemas/training.schema';
+import { Training } from 'src/exercises/schemas/training.schema';
 
 export class UpdateUserDto {
   @ApiProperty({
